@@ -5,7 +5,7 @@ FROM node:22 AS node
 FROM php:8.5-cli AS build
 WORKDIR /app
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
-COPY docker/pnpm/package /usr/local/lib/node_modules/pnpm
+COPY docker/pnpm/node_modules /usr/local/lib/node_modules
 RUN apt-get update && apt-get install -y --no-install-recommends git unzip libatomic1 libstdc++6 libicu-dev libpq-dev libzip-dev libonig-dev \
     && docker-php-ext-install -j"$(nproc)" bcmath intl mbstring pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*

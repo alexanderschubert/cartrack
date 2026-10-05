@@ -3,12 +3,11 @@ set -eu
 
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 pnpm_home="$repo_root/docker/pnpm"
-pnpm_package="$pnpm_home/package"
-pnpm_archive="$pnpm_home/pnpm-11.25.0.tgz"
-mkdir -p "$pnpm_package"
+mkdir -p "$pnpm_home"
 
-curl -fsSL https://registry.npmjs.org/pnpm/-/pnpm-11.25.0.tgz -o "$pnpm_archive"
-tar -xzf "$pnpm_archive" --strip-components=1 -C "$pnpm_package"
-rm "$pnpm_archive"
+docker run --rm \
+    --volume "$pnpm_home:/pnpm" \
+    node:22 \
+    npm install --prefix /pnpm --no-audit --no-fund pnpm@11.25.0
 
 printf 'Prepared pnpm %s for the Docker build.\n' 11.25.0
