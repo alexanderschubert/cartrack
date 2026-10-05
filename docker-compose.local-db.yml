@@ -1,0 +1,32 @@
+services:
+  app:
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-cartrack}
+      DB_USERNAME: ${DB_USERNAME:-cartrack}
+      DB_PASSWORD: ${DB_PASSWORD:-change-me}
+      DB_SSLMODE: disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-cartrack}
+      POSTGRES_USER: ${DB_USERNAME:-cartrack}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change-me}
+    volumes:
+      - cartrack_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cartrack_postgres:
