@@ -16,10 +16,10 @@ jobs:
       packages: write
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up pnpm and Node.js
-        uses: pnpm/setup@v1
+        uses: pnpm/setup@v3
         with:
           version: 11.25.0
           runtime: node@22
@@ -29,10 +29,10 @@ jobs:
         run: mkdir -p docker/pnpm && cp -L "$(command -v pnpm)" docker/pnpm/pnpm && chmod +x docker/pnpm/pnpm
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Sign in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -40,7 +40,7 @@ jobs:
 
       - name: Prepare image tags
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/alexanderschubert/cartrack
           tags: |
@@ -48,7 +48,7 @@ jobs:
             type=sha
 
       - name: Build and publish image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
