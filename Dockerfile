@@ -7,13 +7,11 @@ WORKDIR /app
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
 COPY --from=node /usr/local/bin/npx /usr/local/bin/npx
-COPY --from=node /usr/local/bin/corepack /usr/local/bin/corepack
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 RUN apt-get update && apt-get install -y --no-install-recommends git unzip libicu-dev libpq-dev libzip-dev libonig-dev \
     && docker-php-ext-install -j"$(nproc)" bcmath intl mbstring pdo_pgsql zip \
-    && rm -rf /var/lib/apt/lists/* \
-    && corepack enable \
-    && corepack prepare pnpm@11.25.0 --activate
+    && rm -rf /var/lib/apt/lists/*
+RUN npm install --global pnpm@11.25.0
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 RUN composer update --no-dev --no-interaction --prefer-dist --no-progress --no-scripts \
