@@ -10,10 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends git unzip libat
     && docker-php-ext-install -j"$(nproc)" bcmath intl mbstring pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 RUN chmod +x /usr/local/bin/pnpm
+RUN pnpm --version
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
-RUN composer update --no-dev --no-interaction --prefer-dist --no-progress --no-scripts \
-    && pnpm install --frozen-lockfile
+RUN composer update --no-dev --no-interaction --prefer-dist --no-progress --no-scripts
+RUN pnpm install --frozen-lockfile
 COPY . .
 RUN composer dump-autoload --no-dev --classmap-authoritative --no-scripts \
     && APP_KEY=base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= php artisan package:discover --ansi \

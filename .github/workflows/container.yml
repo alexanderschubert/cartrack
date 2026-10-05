@@ -26,7 +26,7 @@ jobs:
           install: false
 
       - name: Add pnpm to the Docker build context
-        run: mkdir -p docker/pnpm && cp "$(command -v pnpm)" docker/pnpm/pnpm && chmod +x docker/pnpm/pnpm
+        run: mkdir -p docker/pnpm && cp -L "$(command -v pnpm)" docker/pnpm/pnpm && chmod +x docker/pnpm/pnpm
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
