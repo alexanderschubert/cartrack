@@ -36,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
+    /** @return HasMany<Vehicle, $this> */
     public function vehicles(): HasMany
     {
         return $this->hasMany(Vehicle::class);

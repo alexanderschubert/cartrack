@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\OdometerReading;
 use App\Models\Vehicle;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -121,10 +122,11 @@ class VehicleDataController extends Controller
 
     private function requireAbility(Request $request, string $ability): void
     {
-        abort_unless($request->user()->currentAccessToken()?->can($ability), 403, 'API token lacks the required ability.');
+        abort_unless($request->user()->currentAccessToken()->can($ability), 403, 'API token lacks the required ability.');
     }
 
-    private function readingPayload($reading): array
+    /** @return array{id: int, odometer: int, recorded_at: string, source: string, note: string|null} */
+    private function readingPayload(OdometerReading $reading): array
     {
         return [
             'id' => $reading->id,
