@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $vehicle_id
- * @property \Illuminate\Support\Carbon\CarbonImmutable $starts_on
- * @property \Illuminate\Support\Carbon\CarbonImmutable $ends_on
+ * @property \Carbon\CarbonImmutable $starts_on
+ * @property \Carbon\CarbonImmutable $ends_on
  * @property int $start_odometer_km
  * @property int $distance_limit_km
  * @property string|null $note

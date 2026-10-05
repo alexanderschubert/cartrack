@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $vehicle_id
- * @property \Illuminate\Support\Carbon\CarbonImmutable $recorded_at
+ * @property \Carbon\CarbonImmutable $recorded_at
  * @property int|null $odometer_km
  * @property string|null $station
  * @property string|null $place

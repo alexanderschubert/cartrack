@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OdometerReading;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -43,6 +44,7 @@ class DashboardController extends Controller
         ]);
     }
 
+    /** @return array<string, mixed> */
     private function metricsFor(Vehicle $vehicle): array
     {
         $latest = $vehicle->odometerReadings()->orderByDesc('recorded_at')->orderByDesc('id')->first();
@@ -76,7 +78,7 @@ class DashboardController extends Controller
             ? max(0, $latest->odometer_km - $insurance->start_odometer_km)
             : null;
         $limit = $insurance?->distance_limit_km;
-        $months = $yearReadings->groupBy(fn ($reading) => $reading->recorded_at->format('Y-m'));
+        $months = $yearReadings->groupBy(fn (OdometerReading $reading): string => $reading->recorded_at->format('Y-m'));
         $mileageSeries = $months->map(function ($readings, $month) {
             return ['month' => $month, 'odometer_km' => $readings->last()->odometer_km];
         })->values();

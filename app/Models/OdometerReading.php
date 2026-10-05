@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $vehicle_id
  * @property int $odometer_km
- * @property \Illuminate\Support\Carbon\CarbonImmutable $recorded_at
+ * @property \Carbon\CarbonImmutable $recorded_at
  * @property string $source
  * @property string|null $idempotency_key
  * @property string|null $note
