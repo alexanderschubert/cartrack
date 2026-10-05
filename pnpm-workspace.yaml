@@ -4,5 +4,5 @@ packages:
 publicHoistPattern:
     - '@inertiajs/core'
 
-onlyBuiltDependencies:
-    - vue-demi
+allowBuilds:
+    vue-demi: true
