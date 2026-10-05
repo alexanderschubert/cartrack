@@ -430,6 +430,7 @@ cp .env.example .env
 Passe in `.env` mindestens `APP_URL`, `DB_PASSWORD` und `APP_KEY` an. Für die lokale Datenbank starte App, PostgreSQL und Redis gemeinsam:
 
 ```sh
+./docker/prepare-pnpm.sh
 docker compose -f docker-compose.yml -f docker-compose.local-db.yml build
 docker compose -f docker-compose.yml -f docker-compose.local-db.yml run --rm app php artisan key:generate --show
 ```
@@ -446,6 +447,8 @@ Die Web-App ist dann unter `http://localhost:8080` erreichbar. Für einen vorhan
 ## GitHub Container Registry und Unraid
 
 Ein Push auf `main` baut mit GitHub Actions ein Image und veröffentlicht es als `ghcr.io/alexanderschubert/cartrack:latest` sowie mit einem Commit-Tag. Für Unraid braucht es einen PHP-/Docker-Host; GitHub Pages kann Laravel nicht ausführen. Das Image kann auf Unraid in einem Container oder Compose-Stack laufen, während PostgreSQL lokal oder auf einem vorhandenen Server bereitgestellt wird.
+
+Alternativ kann Unraid das Image direkt aus dem geklonten Repository bauen: `docker/prepare-pnpm.sh` einmal ausführen und anschließend `docker compose build app`. Das Compose-Beispiel nutzt dann `cartrack:local`; PostgreSQL und Redis müssen im selben Docker-Netz erreichbar sein.
 
 Für ein öffentlich abrufbares Image stelle die Sichtbarkeit des GitHub-Containerpakets auf **Public**. In Unraid sind mindestens `APP_KEY`, `APP_URL`, `DB_*`, `REDIS_HOST=redis`, `APP_DEBUG=false` und `APP_TIMEZONE=Europe/Berlin` zu konfigurieren. Port `8080` des Containers ist der HTTP-Port für den Reverse Proxy. Dokumente liegen unter `/var/www/storage/app/private` und müssen persistent bleiben; PostgreSQL-Daten werden separat gesichert. Bei manueller Container-Einrichtung müssen App und Redis im selben Docker-Netz liegen. Das Compose-Beispiel stellt App, Queue-Worker und Redis bereit; der Datenbankdienst ist im Overlay optional.
 

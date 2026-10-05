@@ -5,13 +5,11 @@ FROM node:22 AS node
 FROM php:8.5-cli AS build
 WORKDIR /app
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
-COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
-COPY --from=node /usr/local/bin/npx /usr/local/bin/npx
-COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN apt-get update && apt-get install -y --no-install-recommends curl git unzip libicu-dev libpq-dev libzip-dev libonig-dev \
+COPY docker/pnpm/pnpm /usr/local/bin/pnpm
+RUN apt-get update && apt-get install -y --no-install-recommends git unzip libatomic1 libstdc++6 libicu-dev libpq-dev libzip-dev libonig-dev \
     && docker-php-ext-install -j"$(nproc)" bcmath intl mbstring pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
-RUN curl -fsSL https://get.pnpm.io/install.sh | env PNPM_HOME=/usr/local/bin PNPM_VERSION=11.25.0 SHELL=/bin/sh sh -
+RUN chmod +x /usr/local/bin/pnpm
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 RUN composer update --no-dev --no-interaction --prefer-dist --no-progress --no-scripts \
