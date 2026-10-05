@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git unzip libat
     && docker-php-ext-install -j"$(nproc)" bcmath intl mbstring pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 RUN node --version
-RUN ln -s /usr/local/lib/node_modules/pnpm/bin/pnpm.cjs /usr/local/bin/pnpm \
+RUN ln -s /usr/local/lib/node_modules/pnpm/bin/pnpm.mjs /usr/local/bin/pnpm \
     && pnpm --version
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
