@@ -3,14 +3,12 @@ set -eu
 
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 pnpm_home="$repo_root/docker/pnpm"
-mkdir -p "$pnpm_home"
+pnpm_package="$pnpm_home/package"
+pnpm_archive="$pnpm_home/pnpm-11.25.0.tgz"
+mkdir -p "$pnpm_package"
 
-curl -fsSL https://get.pnpm.io/install.sh | env \
-    ENV="$pnpm_home/.profile" \
-    PNPM_HOME="$pnpm_home" \
-    PNPM_VERSION=11.25.0 \
-    SHELL=/bin/sh \
-    sh -
+curl -fsSL https://registry.npmjs.org/pnpm/-/pnpm-11.25.0.tgz -o "$pnpm_archive"
+tar -xzf "$pnpm_archive" --strip-components=1 -C "$pnpm_package"
+rm "$pnpm_archive"
 
-chmod +x "$pnpm_home/pnpm"
 printf 'Prepared pnpm %s for the Docker build.\n' 11.25.0

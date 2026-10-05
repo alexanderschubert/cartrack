@@ -18,15 +18,8 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Set up pnpm and Node.js
-        uses: pnpm/setup@v1
-        with:
-          version: 11.25.0
-          runtime: node@22
-          install: false
-
-      - name: Add pnpm to the Docker build context
-        run: mkdir -p docker/pnpm && cp -L "$(command -v pnpm)" docker/pnpm/pnpm && chmod +x docker/pnpm/pnpm
+      - name: Prepare pnpm for the Docker build
+        run: ./docker/prepare-pnpm.sh
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
